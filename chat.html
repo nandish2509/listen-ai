@@ -1,1020 +1,517 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Listen — Chat</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        body {
-
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-
-            min-height: 100vh;
-
-            color: #263445;
-
-            background:
-
-                radial-gradient(
-                    circle at 10% 10%,
-                    rgba(180, 210, 255, 0.50),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    circle at 90% 20%,
-                    rgba(225, 205, 255, 0.45),
-                    transparent 30%
-                ),
-
-                linear-gradient(
-                    135deg,
-                    #eef5ff,
-                    #f8f3ff,
-                    #eefaf7
-                );
-
-        }
-
-
-        /* CHAT CONTAINER */
-
-        .chat-container {
-
-            width: 100%;
-
-            max-width: 850px;
-
-            height: 100vh;
-
-            margin: auto;
-
-            display: flex;
-
-            flex-direction: column;
-
-            background:
-                rgba(255,255,255,0.62);
-
-            backdrop-filter: blur(18px);
-
-            box-shadow:
-                0 0 50px
-                rgba(70,90,120,0.10);
-
-        }
-
-
-        /* HEADER */
-
-        .header {
-
-            height: 75px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding: 0 22px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,0.8);
-
-            background:
-                rgba(255,255,255,0.55);
-
-        }
-
-
-        .header-left {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-        }
-
-
-        .back {
-
-            width: 40px;
-
-            height: 40px;
-
-            border: none;
-
-            border-radius: 50%;
-
-            background:
-                rgba(255,255,255,0.75);
-
-            font-size: 20px;
-
-            cursor: pointer;
-
-            color: #52657c;
-
-        }
-
-
-        .back:hover {
-
-            background: white;
-
-        }
-
-
-        .logo-small {
-
-            width: 42px;
-
-            height: 42px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: white;
-
-            font-size: 21px;
-
-        }
-
-
-        .title {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 3px;
-
-        }
-
-
-        .title strong {
-
-            font-size: 17px;
-
-            color: #26364a;
-
-        }
-
-
-        .title span {
-
-            font-size: 12px;
-
-            color: #8a98a8;
-
-        }
-
-
-        /* CLEAR BUTTON */
-
-        .clear-button {
-
-            border: none;
-
-            background: transparent;
-
-            color: #7d8b9c;
-
-            cursor: pointer;
-
-            font-size: 13px;
-
-            padding: 8px;
-
-        }
-
-
-        .clear-button:hover {
-
-            color: #52657c;
-
-        }
-
-
-        /* MESSAGES */
-
-        .messages {
-
-            flex: 1;
-
-            overflow-y: auto;
-
-            padding: 30px 25px;
-
-            scroll-behavior: smooth;
-
-        }
-
-
-        .message {
-
-            display: flex;
-
-            margin-bottom: 22px;
-
-        }
-
-
-        .message.ai {
-
-            justify-content: flex-start;
-
-        }
-
-
-        .message.user {
-
-            justify-content: flex-end;
-
-        }
-
-
-        .bubble {
-
-            max-width: 72%;
-
-            padding: 14px 17px;
-
-            border-radius: 20px;
-
-            font-size: 15px;
-
-            line-height: 1.6;
-
-            box-shadow:
-                0 5px 18px
-                rgba(80,100,130,0.06);
-
-        }
-
-
-        .ai .bubble {
-
-            background:
-                rgba(255,255,255,0.80);
-
-            border-bottom-left-radius: 6px;
-
-            color: #4b5c70;
-
-        }
-
-
-        .user .bubble {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #527fdb,
-                    #6c71c9
-                );
-
-            color: white;
-
-            border-bottom-right-radius: 6px;
-
-        }
-
-
-        /* WELCOME */
-
-        .welcome {
-
-            text-align: center;
-
-            padding: 20px 10px 30px;
-
-        }
-
-
-        .welcome-heart {
-
-            font-size: 32px;
-
-            margin-bottom: 10px;
-
-        }
-
-
-        .welcome h2 {
-
-            font-size: 21px;
-
-            color: #35475b;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .welcome p {
-
-            font-size: 14px;
-
-            color: #8491a1;
-
-            line-height: 1.6;
-
-            max-width: 420px;
-
-            margin: auto;
-
-        }
-
-
-        /* TYPING */
-
-        .typing {
-
-            display: none;
-
-            margin-bottom: 18px;
-
-        }
-
-
-        .typing-bubble {
-
-            display: inline-flex;
-
-            gap: 5px;
-
-            padding: 13px 17px;
-
-            background:
-                rgba(255,255,255,0.8);
-
-            border-radius: 20px;
-
-        }
-
-
-        .typing-bubble span {
-
-            width: 6px;
-
-            height: 6px;
-
-            border-radius: 50%;
-
-            background: #9ba8b7;
-
-            animation: typing 1.2s infinite;
-
-        }
-
-
-        .typing-bubble span:nth-child(2) {
-
-            animation-delay: 0.15s;
-
-        }
-
-
-        .typing-bubble span:nth-child(3) {
-
-            animation-delay: 0.3s;
-
-        }
-
-
-        @keyframes typing {
-
-            0%, 60%, 100% {
-
-                transform: translateY(0);
-
-            }
-
-            30% {
-
-                transform: translateY(-5px);
-
-            }
-
-        }
-
-
-        /* INPUT AREA */
-
-        .input-area {
-
-            padding: 15px 18px 18px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,0.8);
-
-            background:
-                rgba(255,255,255,0.45);
-
-        }
-
-
-        .input-box {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            background:
-                rgba(255,255,255,0.90);
-
-            border:
-                1px solid
-                rgba(220,225,235,0.9);
-
-            border-radius: 30px;
-
-            padding: 5px 7px 5px 18px;
-
-            box-shadow:
-                0 8px 25px
-                rgba(80,100,130,0.07);
-
-        }
-
-
-        #messageInput {
-
-            flex: 1;
-
-            border: none;
-
-            outline: none;
-
-            background: transparent;
-
-            font-size: 15px;
-
-            color: #344457;
-
-            min-width: 0;
-
-        }
-
-
-        #messageInput::placeholder {
-
-            color: #a0abb8;
-
-        }
-
-
-        #sendButton {
-
-            width: 43px;
-
-            height: 43px;
-
-            border: none;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #527fdb,
-                    #6c71c9
-                );
-
-            color: white;
-
-            font-size: 18px;
-
-            cursor: pointer;
-
-            flex-shrink: 0;
-
-        }
-
-
-        #sendButton:hover {
-
-            transform: scale(1.04);
-
-        }
-
-
-        .notice {
-
-            text-align: center;
-
-            font-size: 10px;
-
-            color: #9aa5b2;
-
-            margin-top: 8px;
-
-        }
-
-
-        /* MOBILE */
-
-        @media (max-width: 600px) {
-
-            .chat-container {
-
-                height: 100dvh;
-
-            }
-
-
-            .header {
-
-                height: 65px;
-
-                padding: 0 14px;
-
-            }
-
-
-            .messages {
-
-                padding: 22px 15px;
-
-            }
-
-
-            .bubble {
-
-                max-width: 84%;
-
-                font-size: 14px;
-
-            }
-
-
-            .clear-button {
-
-                font-size: 12px;
-
-            }
-
-
-            .input-area {
-
-                padding:
-                    10px 10px
-                    13px;
-
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Listen — A quiet place to talk</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,0.9), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(190,210,255,0.6), transparent 35%),
+        radial-gradient(circle at 50% 90%, rgba(210,195,255,0.7), transparent 40%),
+        linear-gradient(135deg, #dceeff, #eee7ff, #e4f7f1);
+      color: #263248;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 850px;
+      height: 90vh;
+      max-height: 850px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 28px;
+      box-shadow: 0 25px 70px rgba(70, 80, 120, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(120,130,160,0.15);
+      background: rgba(255,255,255,0.45);
+    }
+
+    .back {
+      border: none;
+      background: rgba(255,255,255,0.7);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #91b7ff, #bca4ff);
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(120,130,220,0.25);
+    }
+
+    .title {
+      flex: 1;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .title p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .clear {
+      border: none;
+      background: rgba(255,255,255,0.7);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #65708a;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px;
+      scroll-behavior: smooth;
+    }
+
+    .welcome {
+      text-align: center;
+      margin: 20px auto 30px;
+      max-width: 520px;
+    }
+
+    .welcome .heart {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 8px;
+      font-size: 25px;
+    }
+
+    .welcome p {
+      color: #68748a;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .message-row {
+      display: flex;
+      margin: 13px 0;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 13px 17px;
+      border-radius: 19px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 15px;
+    }
+
+    .message.ai {
+      background: rgba(255,255,255,0.9);
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 5px 18px rgba(80,90,120,0.08);
+    }
+
+    .message.user {
+      background: linear-gradient(135deg, #809ff0, #9c88df);
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .typing {
+      display: none;
+      width: fit-content;
+      background: rgba(255,255,255,0.9);
+      padding: 12px 17px;
+      border-radius: 18px;
+      color: #7c879b;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    .input-area {
+      padding: 17px;
+      border-top: 1px solid rgba(120,130,160,0.15);
+      background: rgba(255,255,255,0.5);
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.9);
+      border-radius: 18px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      min-height: 50px;
+      max-height: 120px;
+      box-shadow: inset 0 0 0 1px rgba(100,110,140,0.08);
+    }
+
+    .send {
+      width: 55px;
+      border: none;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #789bea, #9b86df);
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 7px 18px rgba(110,120,210,0.25);
+    }
+
+    .send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #8a94a6;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 0;
+      }
+
+      .app {
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+      }
+
+      .messages {
+        padding: 18px;
+      }
+
+      .message {
+        max-width: 85%;
+      }
+
+      .clear {
+        font-size: 11px;
+        padding: 8px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <div class="app">
 
-    <div class="chat-container">
+    <div class="header">
 
+      <button class="back" onclick="goHome()">←</button>
 
-        <!-- HEADER -->
+      <div class="logo">♡</div>
 
-        <header class="header">
+      <div class="title">
+        <h1>Listen</h1>
+        <p>A quiet place to talk</p>
+      </div>
 
-
-            <div class="header-left">
-
-
-                <button
-                    class="back"
-                    onclick="goHome()"
-                    aria-label="Go back"
-                >
-
-                    ←
-
-                </button>
-
-
-                <div class="logo-small">
-
-                    💙
-
-                </div>
-
-
-                <div class="title">
-
-                    <strong>
-                        Listen
-                    </strong>
-
-                    <span>
-                        A quiet place to talk
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-            <button
-                class="clear-button"
-                onclick="clearChat()"
-            >
-
-                Clear chat
-
-            </button>
-
-
-        </header>
-
-
-        <!-- MESSAGES -->
-
-        <main
-            class="messages"
-            id="messages"
-        >
-
-
-            <!-- WELCOME -->
-
-            <div
-                class="welcome"
-                id="welcome"
-            >
-
-                <div class="welcome-heart">
-
-                    🌿
-
-                </div>
-
-
-                <h2>
-
-                    I'm here to listen.
-
-                </h2>
-
-
-                <p>
-
-                    You don't have to find the
-                    perfect words. Just start
-                    with whatever is on your mind.
-
-                </p>
-
-            </div>
-
-
-            <!-- AI MESSAGE -->
-
-            <div class="message ai">
-
-                <div class="bubble">
-
-                    Hey. I'm glad you came here.
-
-                    <br><br>
-
-                    What's been on your mind lately?
-
-                </div>
-
-            </div>
-
-
-            <!-- TYPING -->
-
-            <div
-                class="typing"
-                id="typing"
-            >
-
-                <div class="typing-bubble">
-
-                    <span></span>
-                    <span></span>
-                    <span></span>
-
-                </div>
-
-            </div>
-
-
-        </main>
-
-
-        <!-- INPUT -->
-
-        <div class="input-area">
-
-
-            <form
-                class="input-box"
-                id="chatForm"
-            >
-
-
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Write what's on your mind..."
-                    autocomplete="off"
-                    maxlength="2000"
-                >
-
-
-                <button
-                    type="submit"
-                    id="sendButton"
-                    aria-label="Send message"
-                >
-
-                    ↑
-
-                </button>
-
-
-            </form>
-
-
-            <div class="notice">
-
-                AI conversation • No account required
-
-            </div>
-
-
-        </div>
-
+      <button class="clear" onclick="clearChat()">Clear</button>
 
     </div>
 
 
-    <script>
+    <div class="messages" id="messages">
+
+      <div class="welcome" id="welcome">
+        <div class="heart">♡</div>
+
+        <h2>You can talk here.</h2>
+
+        <p>
+          You don't have to explain everything perfectly.
+          Start with whatever is on your mind.
+        </p>
+      </div>
 
 
-        const form =
-            document.getElementById("chatForm");
+      <div class="message-row">
+        <div class="message ai">
+          Hey. I'm glad you came here. What's been on your mind lately?
+        </div>
+      </div>
 
 
-        const input =
-            document.getElementById("messageInput");
+      <div class="typing" id="typing">
+        Listen is thinking...
+      </div>
+
+    </div>
 
 
-        const messages =
-            document.getElementById("messages");
+    <div class="input-area">
+
+      <form id="chatForm">
+
+        <textarea
+          id="messageInput"
+          maxlength="2000"
+          placeholder="Type what's on your mind..."
+          required
+        ></textarea>
+
+        <button class="send" id="sendButton" type="submit">
+          ➤
+        </button>
+
+      </form>
+
+      <div class="note">
+        AI conversation • Please don't share passwords or sensitive personal information
+      </div>
+
+    </div>
+
+  </div>
 
 
-        const typing =
-            document.getElementById("typing");
+  <script>
+
+    /*
+      YOUR CLOUDFLARE WORKER
+    */
+
+    const WORKER_URL =
+      "https://listen-ai.nandish2509.workers.dev/";
 
 
-        const welcome =
-            document.getElementById("welcome");
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const messages = document.getElementById("messages");
+    const typing = document.getElementById("typing");
+    const sendButton = document.getElementById("sendButton");
+    const welcome = document.getElementById("welcome");
 
 
-        /* GO HOME */
+    function goHome() {
+      window.location.href = "index.html";
+    }
 
-        function goHome() {
 
-            window.location.href =
-                "index.html";
+    function clearChat() {
+
+      messages.innerHTML = "";
+
+      messages.appendChild(welcome);
+
+      const firstMessage = document.createElement("div");
+
+      firstMessage.className = "message-row";
+
+      firstMessage.innerHTML = `
+        <div class="message ai">
+          Hey. I'm glad you came here. What's been on your mind lately?
+        </div>
+      `;
+
+      messages.appendChild(firstMessage);
+
+      messages.appendChild(typing);
+
+      typing.style.display = "none";
+    }
+
+
+    function addMessage(text, type) {
+
+      const row = document.createElement("div");
+
+      row.className = "message-row " + type;
+
+      const bubble = document.createElement("div");
+
+      bubble.className = "message " + type;
+
+      bubble.textContent = text;
+
+      row.appendChild(bubble);
+
+      messages.appendChild(row);
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+
+    function showTyping() {
+
+      typing.style.display = "block";
+
+      messages.appendChild(typing);
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+
+    function hideTyping() {
+
+      typing.style.display = "none";
+    }
+
+
+    async function sendMessage(text) {
+
+      try {
+
+        const response = await fetch(WORKER_URL, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            message: text
+          })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error || "Something went wrong."
+          );
 
         }
 
 
-        /* CLEAR CHAT */
-
-        function clearChat() {
-
-            messages.innerHTML = "";
-
-            messages.innerHTML = `
-
-                <div class="welcome">
-
-                    <div class="welcome-heart">
-                        🌿
-                    </div>
-
-                    <h2>
-                        I'm here to listen.
-                    </h2>
-
-                    <p>
-                        You don't have to find the
-                        perfect words. Just start
-                        with whatever is on your mind.
-                    </p>
-
-                </div>
-
-                <div class="message ai">
-
-                    <div class="bubble">
-
-                        Hey. I'm here.
-
-                        <br><br>
-
-                        What's been on your mind lately?
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-        /* ADD MESSAGE */
-
-        function addMessage(text, type) {
-
-            const message =
-                document.createElement("div");
-
-
-            message.className =
-                "message " + type;
-
-
-            const bubble =
-                document.createElement("div");
-
-
-            bubble.className =
-                "bubble";
-
-
-            bubble.textContent =
-                text;
-
-
-            message.appendChild(bubble);
-
-
-            messages.appendChild(message);
-
-
-            messages.scrollTop =
-                messages.scrollHeight;
-
-        }
-
-
-        /* SHOW TYPING */
-
-        function showTyping() {
-
-            typing.style.display =
-                "block";
-
-
-            messages.appendChild(
-                typing
-            );
-
-
-            messages.scrollTop =
-                messages.scrollHeight;
-
-        }
-
-
-        /* HIDE TYPING */
-
-        function hideTyping() {
-
-            typing.style.display =
-                "none";
-
-        }
-
-
-        /* SEND MESSAGE */
-
-        form.addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const text =
-                    input.value.trim();
-
-
-                if (!text) {
-
-                    return;
-
-                }
-
-
-                addMessage(
-                    text,
-                    "user"
-                );
-
-
-                input.value = "";
-
-
-                showTyping();
-
-
-                /*
-                    GPT CONNECTION WILL
-                    BE ADDED IN THE NEXT STEP.
-                */
-
-
-                setTimeout(
-                    function() {
-
-                        hideTyping();
-
-
-                        addMessage(
-                            "I'm here to listen. Tell me a little more about what's been going on.",
-                            "ai"
-                        );
-
-                    },
-                    1200
-                );
-
-            }
+        hideTyping();
+
+        addMessage(
+          data.reply || "I'm here to listen. Tell me more.",
+          "ai"
         );
 
 
-        /* ENTER KEY */
+      } catch (error) {
 
-        input.addEventListener(
-            "keydown",
-            function(event) {
+        hideTyping();
 
-                if (
-                    event.key === "Enter"
-                    &&
-                    !event.shiftKey
-                ) {
-
-                    event.preventDefault();
-
-                    form.requestSubmit();
-
-                }
-
-            }
+        addMessage(
+          "I'm sorry, I couldn't connect right now. Please try again in a moment.",
+          "ai"
         );
 
-    </script>
+        console.error("Connection error:", error);
 
+      }
+
+    }
+
+
+    form.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+
+      const text = input.value.trim();
+
+
+      if (!text) {
+        return;
+      }
+
+
+      addMessage(text, "user");
+
+
+      input.value = "";
+
+      input.disabled = true;
+
+      sendButton.disabled = true;
+
+
+      showTyping();
+
+
+      await sendMessage(text);
+
+
+      input.disabled = false;
+
+      sendButton.disabled = false;
+
+      input.focus();
+
+    });
+
+
+    input.addEventListener("keydown", function(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        form.requestSubmit();
+
+      }
+
+    });
+
+  </script>
 
 </body>
-
 </html>
-```
