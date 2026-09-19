@@ -1,192 +1,517 @@
-export default {
-  async fetch(request, env) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "POST, OPTIONS"
-    };
+  <title>Listen — A quiet place to talk</title>
 
-    // Allow browser preflight request
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: corsHeaders
-      });
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    // Only allow POST
-    if (request.method !== "POST") {
-      return new Response(
-        JSON.stringify({
-          error: "Only POST requests are allowed."
-        }),
-        {
-          status: 405,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json"
-          }
-        }
-      );
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,0.9), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(190,210,255,0.6), transparent 35%),
+        radial-gradient(circle at 50% 90%, rgba(210,195,255,0.7), transparent 40%),
+        linear-gradient(135deg, #dceeff, #eee7ff, #e4f7f1);
+      color: #263248;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
-    try {
+    .app {
+      width: 100%;
+      max-width: 850px;
+      height: 90vh;
+      max-height: 850px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 28px;
+      box-shadow: 0 25px 70px rgba(70, 80, 120, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-      const body = await request.json();
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(120,130,160,0.15);
+      background: rgba(255,255,255,0.45);
+    }
 
-      const message = body.message;
+    .back {
+      border: none;
+      background: rgba(255,255,255,0.7);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
 
-      if (!message || typeof message !== "string") {
-        return new Response(
-          JSON.stringify({
-            error: "Message is required."
-          }),
-          {
-            status: 400,
-            headers: {
-              ...corsHeaders,
-              "Content-Type": "application/json"
-            }
-          }
-        );
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #91b7ff, #bca4ff);
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 8px 20px rgba(120,130,220,0.25);
+    }
+
+    .title {
+      flex: 1;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .title p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .clear {
+      border: none;
+      background: rgba(255,255,255,0.7);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #65708a;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px;
+      scroll-behavior: smooth;
+    }
+
+    .welcome {
+      text-align: center;
+      margin: 20px auto 30px;
+      max-width: 520px;
+    }
+
+    .welcome .heart {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 8px;
+      font-size: 25px;
+    }
+
+    .welcome p {
+      color: #68748a;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .message-row {
+      display: flex;
+      margin: 13px 0;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 13px 17px;
+      border-radius: 19px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 15px;
+    }
+
+    .message.ai {
+      background: rgba(255,255,255,0.9);
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 5px 18px rgba(80,90,120,0.08);
+    }
+
+    .message.user {
+      background: linear-gradient(135deg, #809ff0, #9c88df);
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .typing {
+      display: none;
+      width: fit-content;
+      background: rgba(255,255,255,0.9);
+      padding: 12px 17px;
+      border-radius: 18px;
+      color: #7c879b;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    .input-area {
+      padding: 17px;
+      border-top: 1px solid rgba(120,130,160,0.15);
+      background: rgba(255,255,255,0.5);
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.9);
+      border-radius: 18px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      min-height: 50px;
+      max-height: 120px;
+      box-shadow: inset 0 0 0 1px rgba(100,110,140,0.08);
+    }
+
+    .send {
+      width: 55px;
+      border: none;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #789bea, #9b86df);
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 7px 18px rgba(110,120,210,0.25);
+    }
+
+    .send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #8a94a6;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 0;
       }
 
-      if (message.length > 2000) {
-        return new Response(
-          JSON.stringify({
-            error: "Message is too long."
-          }),
-          {
-            status: 400,
-            headers: {
-              ...corsHeaders,
-              "Content-Type": "application/json"
-            }
-          }
-        );
+      .app {
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
       }
 
+      .messages {
+        padding: 18px;
+      }
 
-      const openAIResponse = await fetch(
-        "https://api.openai.com/v1/responses",
-        {
+      .message {
+        max-width: 85%;
+      }
+
+      .clear {
+        font-size: 11px;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="header">
+
+      <button class="back" onclick="goHome()">←</button>
+
+      <div class="logo">♡</div>
+
+      <div class="title">
+        <h1>Listen</h1>
+        <p>A quiet place to talk</p>
+      </div>
+
+      <button class="clear" onclick="clearChat()">Clear</button>
+
+    </div>
+
+
+    <div class="messages" id="messages">
+
+      <div class="welcome" id="welcome">
+        <div class="heart">♡</div>
+
+        <h2>You can talk here.</h2>
+
+        <p>
+          You don't have to explain everything perfectly.
+          Start with whatever is on your mind.
+        </p>
+      </div>
+
+
+      <div class="message-row">
+        <div class="message ai">
+          Hey. I'm glad you came here. What's been on your mind lately?
+        </div>
+      </div>
+
+
+      <div class="typing" id="typing">
+        Listen is thinking...
+      </div>
+
+    </div>
+
+
+    <div class="input-area">
+
+      <form id="chatForm">
+
+        <textarea
+          id="messageInput"
+          maxlength="2000"
+          placeholder="Type what's on your mind..."
+          required
+        ></textarea>
+
+        <button class="send" id="sendButton" type="submit">
+          ➤
+        </button>
+
+      </form>
+
+      <div class="note">
+        AI conversation • Please don't share passwords or sensitive personal information
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      YOUR CLOUDFLARE WORKER
+    */
+
+    const WORKER_URL =
+      "https://listen-ai.nandish2509.workers.dev/";
+
+
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const messages = document.getElementById("messages");
+    const typing = document.getElementById("typing");
+    const sendButton = document.getElementById("sendButton");
+    const welcome = document.getElementById("welcome");
+
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+
+    function clearChat() {
+
+      messages.innerHTML = "";
+
+      messages.appendChild(welcome);
+
+      const firstMessage = document.createElement("div");
+
+      firstMessage.className = "message-row";
+
+      firstMessage.innerHTML = `
+        <div class="message ai">
+          Hey. I'm glad you came here. What's been on your mind lately?
+        </div>
+      `;
+
+      messages.appendChild(firstMessage);
+
+      messages.appendChild(typing);
+
+      typing.style.display = "none";
+    }
+
+
+    function addMessage(text, type) {
+
+      const row = document.createElement("div");
+
+      row.className = "message-row " + type;
+
+      const bubble = document.createElement("div");
+
+      bubble.className = "message " + type;
+
+      bubble.textContent = text;
+
+      row.appendChild(bubble);
+
+      messages.appendChild(row);
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+
+    function showTyping() {
+
+      typing.style.display = "block";
+
+      messages.appendChild(typing);
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+
+    function hideTyping() {
+
+      typing.style.display = "none";
+    }
+
+
+    async function sendMessage(text) {
+
+      try {
+
+        const response = await fetch(WORKER_URL, {
+
           method: "POST",
 
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+            "Content-Type": "application/json"
           },
 
           body: JSON.stringify({
-
-            model: "gpt-5.6-luna",
-
-            instructions: `
-You are Listen, a supportive AI conversation companion.
-
-You are an AI, not a human, therapist, doctor, counsellor, or emergency service.
-
-Be warm, calm, respectful, empathetic and non-judgmental.
-
-Listen carefully and respond naturally.
-
-For normal sadness, loneliness, friendship problems,
-relationship problems, school stress and everyday difficulties,
-help the person express what they are feeling.
-
-Do not diagnose medical or mental health conditions.
-
-Do not pretend to have human feelings or personal experiences.
-
-Do not encourage emotional dependency.
-
-Never tell someone that you are the only person they need.
-
-If the person appears to be in immediate danger or says
-they intend to seriously hurt themselves or someone else,
-encourage them to contact local emergency services,
-a trusted person nearby, or an appropriate crisis service.
-Focus on getting immediate real-world help.
-
-Never provide instructions for suicide, self-harm,
-or harming another person.
-
-Keep responses reasonably concise and conversational.
-`,
-
-            input: message
-
+            message: text
           })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error || "Something went wrong."
+          );
+
         }
-      );
 
 
-      const data = await openAIResponse.json();
+        hideTyping();
 
-
-      if (!openAIResponse.ok) {
-
-        console.error(
-          "OpenAI API error:",
-          JSON.stringify(data)
+        addMessage(
+          data.reply || "I'm here to listen. Tell me more.",
+          "ai"
         );
 
-        return new Response(
-          JSON.stringify({
-            error: "OpenAI API request failed."
-          }),
-          {
-            status: 500,
-            headers: {
-              ...corsHeaders,
-              "Content-Type": "application/json"
-            }
-          }
+
+      } catch (error) {
+
+        hideTyping();
+
+        addMessage(
+          "I'm sorry, I couldn't connect right now. Please try again in a moment.",
+          "ai"
         );
+
+        console.error("Connection error:", error);
 
       }
 
-
-      const reply =
-        data.output_text ||
-        "I'm here to listen. Tell me a little more.";
-
-
-      return new Response(
-        JSON.stringify({
-          reply: reply
-        }),
-        {
-          status: 200,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        "Worker error:",
-        error
-      );
-
-      return new Response(
-        JSON.stringify({
-          error: "Something went wrong."
-        }),
-        {
-          status: 500,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
     }
 
-  }
-};
+
+    form.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+
+      const text = input.value.trim();
+
+
+      if (!text) {
+        return;
+      }
+
+
+      addMessage(text, "user");
+
+
+      input.value = "";
+
+      input.disabled = true;
+
+      sendButton.disabled = true;
+
+
+      showTyping();
+
+
+      await sendMessage(text);
+
+
+      input.disabled = false;
+
+      sendButton.disabled = false;
+
+      input.focus();
+
+    });
+
+
+    input.addEventListener("keydown", function(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        form.requestSubmit();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
