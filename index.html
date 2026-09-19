@@ -1,31 +1,396 @@
+```html
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
 
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Listen — Someone to Talk To</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef5ff,
+                    #f8f9ff
+                );
+
+            color: #1f2937;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* MAIN PAGE */
+
+        .home {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 25px;
+
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 650px;
+
+            text-align: center;
+
+        }
+
+
+        /* LOGO */
+
+        .logo {
+
+            width: 90px;
+
+            height: 90px;
+
+            margin: 0 auto 30px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: white;
+
+            box-shadow:
+                0 10px 35px rgba(37, 99, 235, 0.12);
+
+            font-size: 48px;
+
+        }
+
+
+        /* TITLE */
+
+        h1 {
+
+            font-size: 52px;
+
+            line-height: 1.1;
+
+            font-weight: 700;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        /* SUBTITLE */
+
+        .subtitle {
+
+            font-size: 23px;
+
+            color: #4b5563;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        /* DESCRIPTION */
+
+        .description {
+
+            max-width: 520px;
+
+            margin: 0 auto 35px;
+
+            font-size: 17px;
+
+            line-height: 1.7;
+
+            color: #6b7280;
+
+        }
+
+
+        /* BUTTON */
+
+        .start-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 16px 32px;
+
+            border-radius: 30px;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 10px 25px rgba(37, 99, 235, 0.22);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+
+        }
+
+
+        .start-button:hover {
+
+            background: #1d4ed8;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 14px 30px rgba(37, 99, 235, 0.28);
+
+        }
+
+
+        .arrow {
+
+            font-size: 19px;
+
+        }
+
+
+        /* TRUST TEXT */
+
+        .small-text {
+
+            margin-top: 24px;
+
+            font-size: 13px;
+
+            color: #9ca3af;
+
+        }
+
+
+        /* INFORMATION BOX */
+
+        .info {
+
+            margin: 35px auto 0;
+
+            max-width: 520px;
+
+            padding: 16px 20px;
+
+            border-radius: 15px;
+
+            background: rgba(255, 255, 255, 0.7);
+
+            border: 1px solid #e5e7eb;
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .home {
+
+                padding: 20px;
+
+            }
+
+
+            .logo {
+
+                width: 75px;
+
+                height: 75px;
+
+                font-size: 40px;
+
+                margin-bottom: 25px;
+
+            }
+
+
+            h1 {
+
+                font-size: 38px;
+
+            }
+
+
+            .subtitle {
+
+                font-size: 19px;
+
+            }
+
+
+            .description {
+
+                font-size: 16px;
+
+            }
+
+
+            .start-button {
+
+                width: 100%;
+
+                max-width: 300px;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
-</head>
 
 <body>
 
-    <h1>💙 Listen</h1>
 
-    <h2>You're not alone.</h2>
+    <main class="home">
 
-    <p>
-        Sometimes you just need someone to talk to.
-    </p>
 
-    <button>
-        Start Talking
-    </button>
+        <div class="container">
+
+
+            <!-- LOGO -->
+
+            <div class="logo">
+
+                💙
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1>
+
+                You're not alone.
+
+            </h1>
+
+
+            <!-- SUBTITLE -->
+
+            <p class="subtitle">
+
+                Sometimes you just need someone to listen.
+
+            </p>
+
+
+            <!-- DESCRIPTION -->
+
+            <p class="description">
+
+                Talk freely, without judgement.
+                Put your thoughts into words
+                and take things one moment at a time.
+
+            </p>
+
+
+            <!-- START BUTTON -->
+
+            <a
+                href="chat.html"
+                class="start-button"
+            >
+
+                Start Talking
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- SMALL TEXT -->
+
+            <p class="small-text">
+
+                Anonymous • No account required
+
+            </p>
+
+
+            <!-- INFORMATION -->
+
+            <div class="info">
+
+                💙 This is an AI conversation companion,
+                not a therapist or emergency service.
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
 
 </body>
 
 </html>
+```
