@@ -1,650 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Listen — Emotional Wellness</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.9), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(190,220,255,0.7), transparent 35%),
+        radial-gradient(circle at 50% 90%, rgba(210,200,255,0.65), transparent 40%),
+        linear-gradient(135deg, #dceeff, #eef3ff, #e9e0ff);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      color: #253858;
+      overflow: hidden;
+    }
+
+    /* Soft floating background circles */
+
+    .circle {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.35;
+      pointer-events: none;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .circle.one {
+      width: 180px;
+      height: 180px;
+      background: #ffffff;
+      top: 8%;
+      left: 5%;
+    }
+
+    .circle.two {
+      width: 240px;
+      height: 240px;
+      background: #c9d9ff;
+      bottom: 5%;
+      right: 3%;
+      animation-delay: 2s;
+    }
+
+    .circle.three {
+      width: 100px;
+      height: 100px;
+      background: #d8c8ff;
+      top: 55%;
+      left: 10%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    /* Main card */
+
+    .container {
+      width: min(92%, 720px);
+      padding: 55px 35px;
+      text-align: center;
+
+      background: rgba(255, 255, 255, 0.48);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 32px;
+
+      box-shadow:
+        0 25px 70px rgba(70, 90, 140, 0.18),
+        inset 0 1px 1px rgba(255,255,255,0.8);
+
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Logo */
 
-    <meta charset="UTF-8">
+    .logo {
+      width: 82px;
+      height: 82px;
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+      margin: 0 auto 25px;
 
-    <title>Listen — A Place to Talk</title>
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
+      border-radius: 28px;
 
-    <style>
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.9),
+        rgba(220,230,255,0.65)
+      );
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      box-shadow:
+        0 12px 30px rgba(80,100,160,0.15),
+        inset 0 1px 1px rgba(255,255,255,0.9);
 
+      font-size: 38px;
+    }
 
-        body {
+    /* Heading */
 
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
+    h1 {
+      font-size: clamp(42px, 8vw, 68px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 15px;
 
-            min-height: 100vh;
+      background: linear-gradient(
+        90deg,
+        #4267a8,
+        #6874c9,
+        #8567b5
+      );
 
-            color: #263445;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-            overflow-x: hidden;
+    .tagline {
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 500;
+      color: #3e5278;
+      margin-bottom: 18px;
+    }
 
-            background:
+    .description {
+      max-width: 500px;
+      margin: 0 auto 32px;
 
-                radial-gradient(
-                    circle at 15% 20%,
-                    rgba(180, 210, 255, 0.55),
-                    transparent 32%
-                ),
+      font-size: 16px;
+      line-height: 1.7;
 
-                radial-gradient(
-                    circle at 85% 25%,
-                    rgba(224, 200, 255, 0.50),
-                    transparent 30%
-                ),
+      color: #65738e;
+    }
 
-                radial-gradient(
-                    circle at 50% 90%,
-                    rgba(190, 235, 225, 0.50),
-                    transparent 35%
-                ),
+    /* Button */
 
-                linear-gradient(
-                    135deg,
-                    #eef5ff 0%,
-                    #f8f3ff 48%,
-                    #eefaf7 100%
-                );
+    .start-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
 
-        }
+      padding: 16px 32px;
 
+      border: none;
+      border-radius: 18px;
 
-        /* SOFT FLOATING LIGHTS */
+      background: linear-gradient(
+        135deg,
+        #5c7fca,
+        #766bc5
+      );
 
-        body::before {
+      color: white;
+      font-size: 17px;
+      font-weight: 600;
 
-            content: "";
+      cursor: pointer;
+      text-decoration: none;
 
-            position: fixed;
+      box-shadow:
+        0 12px 25px rgba(83, 105, 180, 0.25);
 
-            width: 280px;
-            height: 280px;
+      transition: all 0.25s ease;
+    }
 
-            border-radius: 50%;
+    .start-button:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 16px 32px rgba(83, 105, 180, 0.32);
+    }
 
-            background:
-                rgba(255, 255, 255, 0.35);
+    .start-button:active {
+      transform: translateY(0);
+    }
 
-            filter: blur(5px);
+    /* Privacy line */
 
-            top: -90px;
-            left: -70px;
+    .privacy {
+      margin-top: 22px;
 
-            pointer-events: none;
+      font-size: 13px;
+      color: #7b879d;
 
-        }
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+    }
 
+    /* Bottom right credit */
 
-        body::after {
+    .credit {
+      position: fixed;
 
-            content: "";
+      right: 16px;
+      bottom: 12px;
 
-            position: fixed;
+      font-size: 10px;
+      letter-spacing: 0.3px;
 
-            width: 320px;
-            height: 320px;
+      color: rgba(65, 78, 110, 0.55);
 
-            border-radius: 50%;
+      z-index: 10;
 
-            background:
-                rgba(255, 255, 255, 0.28);
+      user-select: none;
+    }
 
-            filter: blur(8px);
+    /* Mobile */
 
-            bottom: -120px;
-            right: -90px;
+    @media (max-width: 600px) {
 
-            pointer-events: none;
+      .container {
+        padding: 42px 22px;
+        border-radius: 27px;
+      }
 
-        }
+      .logo {
+        width: 70px;
+        height: 70px;
+        font-size: 32px;
+        border-radius: 23px;
+      }
 
+      .description {
+        font-size: 15px;
+      }
 
-        /* MAIN */
+      .start-button {
+        width: 100%;
+        max-width: 300px;
+      }
 
-        .home {
-
-            min-height: 100vh;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            padding: 30px 20px;
-
-            position: relative;
-
-        }
-
-
-        .container {
-
-            width: 100%;
-
-            max-width: 680px;
-
-            text-align: center;
-
-            position: relative;
-
-            z-index: 2;
-
-        }
-
-
-        /* LOGO */
-
-        .logo {
-
-            width: 105px;
-
-            height: 105px;
-
-            margin: 0 auto 30px;
-
-            border-radius: 50%;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 52px;
-
-            background:
-
-                rgba(255, 255, 255, 0.70);
-
-            border:
-
-                1px solid rgba(255,255,255,0.85);
-
-            box-shadow:
-
-                0 20px 50px
-                rgba(90, 110, 150, 0.14);
-
-            backdrop-filter: blur(12px);
-
-            animation:
-
-                gentleFloat 5s ease-in-out infinite;
-
-        }
-
-
-        @keyframes gentleFloat {
-
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-7px);
-            }
-
-        }
-
-
-        /* TITLE */
-
-        h1 {
-
-            font-size: 56px;
-
-            line-height: 1.08;
-
-            font-weight: 700;
-
-            letter-spacing: -1.5px;
-
-            color: #26364a;
-
-            margin-bottom: 18px;
-
-        }
-
-
-        /* SUPPORTIVE LINE */
-
-        .subtitle {
-
-            font-size: 24px;
-
-            line-height: 1.5;
-
-            color: #52657c;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        /* DESCRIPTION */
-
-        .description {
-
-            max-width: 550px;
-
-            margin: 0 auto 36px;
-
-            font-size: 17px;
-
-            line-height: 1.8;
-
-            color: #68788c;
-
-        }
-
-
-        /* BUTTON */
-
-        .start-button {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 12px;
-
-            min-width: 190px;
-
-            padding: 17px 30px;
-
-            border-radius: 35px;
-
-            background:
-
-                linear-gradient(
-                    135deg,
-                    #527fdb,
-                    #6c71c9
-                );
-
-            color: white;
-
-            text-decoration: none;
-
-            font-size: 17px;
-
-            font-weight: 600;
-
-            box-shadow:
-
-                0 14px 35px
-                rgba(82, 112, 190, 0.28);
-
-            transition:
-
-                transform 0.25s ease,
-                box-shadow 0.25s ease;
-
-        }
-
-
-        .start-button:hover {
-
-            transform: translateY(-3px);
-
-            box-shadow:
-
-                0 18px 40px
-                rgba(82, 112, 190, 0.35);
-
-        }
-
-
-        .arrow {
-
-            font-size: 21px;
-
-            transition:
-                transform 0.25s ease;
-
-        }
-
-
-        .start-button:hover .arrow {
-
-            transform: translateX(4px);
-
-        }
-
-
-        /* TRUST */
-
-        .small-text {
-
-            margin-top: 22px;
-
-            font-size: 13px;
-
-            color: #8794a5;
-
-        }
-
-
-        /* SUPPORT CARD */
-
-        .support-card {
-
-            max-width: 540px;
-
-            margin: 40px auto 0;
-
-            padding: 21px 25px;
-
-            border-radius: 20px;
-
-            background:
-
-                rgba(255, 255, 255, 0.48);
-
-            border:
-
-                1px solid
-                rgba(255, 255, 255, 0.70);
-
-            box-shadow:
-
-                0 15px 45px
-                rgba(80, 100, 130, 0.08);
-
-            backdrop-filter: blur(14px);
-
-        }
-
-
-        .support-card .quote {
-
-            font-size: 15px;
-
-            line-height: 1.7;
-
-            color: #596b80;
-
-            font-style: italic;
-
-        }
-
-
-        .support-card .heart {
-
-            display: block;
-
-            font-size: 18px;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        /* DECORATIVE DOTS */
-
-        .dot {
-
-            position: fixed;
-
-            border-radius: 50%;
-
-            pointer-events: none;
-
-            opacity: 0.45;
-
-        }
-
-
-        .dot-one {
-
-            width: 9px;
-            height: 9px;
-
-            background: #8bb2e8;
-
-            top: 20%;
-
-            left: 9%;
-
-        }
-
-
-        .dot-two {
-
-            width: 7px;
-            height: 7px;
-
-            background: #c7a8e8;
-
-            top: 34%;
-
-            right: 11%;
-
-        }
-
-
-        .dot-three {
-
-            width: 11px;
-            height: 11px;
-
-            background: #8fcfc0;
-
-            bottom: 20%;
-
-            left: 13%;
-
-        }
-
-
-        /* MOBILE */
-
-        @media (max-width: 600px) {
-
-            .home {
-
-                padding:
-                    35px 20px;
-
-            }
-
-
-            .logo {
-
-                width: 82px;
-
-                height: 82px;
-
-                font-size: 40px;
-
-                margin-bottom: 25px;
-
-            }
-
-
-            h1 {
-
-                font-size: 40px;
-
-                letter-spacing: -1px;
-
-            }
-
-
-            .subtitle {
-
-                font-size: 19px;
-
-            }
-
-
-            .description {
-
-                font-size: 15.5px;
-
-                line-height: 1.7;
-
-            }
-
-
-            .start-button {
-
-                width: 100%;
-
-                max-width: 300px;
-
-            }
-
-
-            .support-card {
-
-                margin-top: 32px;
-
-                padding: 18px;
-
-            }
-
-        }
-
-    </style>
-
+      .credit {
+        font-size: 9px;
+        right: 10px;
+        bottom: 8px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <!-- Background decoration -->
 
-    <!-- DECORATIVE ELEMENTS -->
-
-    <div class="dot dot-one"></div>
-
-    <div class="dot dot-two"></div>
-
-    <div class="dot dot-three"></div>
+  <div class="circle one"></div>
+  <div class="circle two"></div>
+  <div class="circle three"></div>
 
 
-    <!-- MAIN PAGE -->
+  <!-- Main opening page -->
 
-    <main class="home">
+  <main class="container">
 
+    <div class="logo">
+      💙
+    </div>
 
-        <div class="container">
+    <h1>Listen</h1>
 
+    <div class="tagline">
+      You don't have to keep everything inside.
+    </div>
 
-            <!-- LOGO -->
+    <p class="description">
+      A quiet space where you can talk, express what's on your mind,
+      and be heard without judgment.
+    </p>
 
-            <div class="logo">
+    <a href="chat.html" class="start-button">
+      Start Talking
+      <span>→</span>
+    </a>
 
-                💙
+    <div class="privacy">
+      🔒 Anonymous&nbsp; • &nbsp;No account required
+    </div>
 
-            </div>
-
-
-            <!-- TITLE -->
-
-            <h1>
-
-                You're not alone.
-
-            </h1>
-
-
-            <!-- SUBTITLE -->
-
-            <p class="subtitle">
-
-                You don't have to carry everything
-                by yourself.
-
-            </p>
+  </main>
 
 
-            <!-- DESCRIPTION -->
+  <!-- Small bottom-right credit -->
 
-            <p class="description">
-
-                Sometimes you just need a quiet place
-                to say what you're feeling.
-
-                <br>
-
-                Take a breath. Write it down.
-                Someone is here to listen.
-
-            </p>
-
-
-            <!-- BUTTON -->
-
-            <a
-                href="chat.html"
-                class="start-button"
-            >
-
-                Start Talking
-
-                <span class="arrow">
-                    →
-                </span>
-
-            </a>
-
-
-            <!-- SMALL TEXT -->
-
-            <p class="small-text">
-
-                Anonymous • No account required
-
-            </p>
-
-
-            <!-- SUPPORTIVE MESSAGE -->
-
-            <div class="support-card">
-
-                <span class="heart">
-                    🌿
-                </span>
-
-                <p class="quote">
-
-                    "You don't need to have
-                    everything figured out.
-                    Start with whatever is
-                    on your mind."
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
+  <div class="credit">
+    Made by Emotional Wellness
+  </div>
 
 </body>
-
 </html>
-```
