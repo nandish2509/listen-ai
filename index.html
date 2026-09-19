@@ -6,12 +6,11 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Listen — Someone to Talk To</title>
+    <title>Listen — A Place to Talk</title>
+
 
     <style>
 
@@ -31,21 +30,93 @@
                 Arial,
                 sans-serif;
 
+            min-height: 100vh;
+
+            color: #263445;
+
+            overflow-x: hidden;
+
             background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(180, 210, 255, 0.55),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 85% 25%,
+                    rgba(224, 200, 255, 0.50),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(190, 235, 225, 0.50),
+                    transparent 35%
+                ),
+
                 linear-gradient(
                     135deg,
-                    #eef5ff,
-                    #f8f9ff
+                    #eef5ff 0%,
+                    #f8f3ff 48%,
+                    #eefaf7 100%
                 );
-
-            color: #1f2937;
-
-            min-height: 100vh;
 
         }
 
 
-        /* MAIN PAGE */
+        /* SOFT FLOATING LIGHTS */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            width: 280px;
+            height: 280px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.35);
+
+            filter: blur(5px);
+
+            top: -90px;
+            left: -70px;
+
+            pointer-events: none;
+
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 320px;
+            height: 320px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.28);
+
+            filter: blur(8px);
+
+            bottom: -120px;
+            right: -90px;
+
+            pointer-events: none;
+
+        }
+
+
+        /* MAIN */
 
         .home {
 
@@ -57,7 +128,9 @@
 
             align-items: center;
 
-            padding: 25px;
+            padding: 30px 20px;
+
+            position: relative;
 
         }
 
@@ -66,9 +139,13 @@
 
             width: 100%;
 
-            max-width: 650px;
+            max-width: 680px;
 
             text-align: center;
+
+            position: relative;
+
+            z-index: 2;
 
         }
 
@@ -77,9 +154,9 @@
 
         .logo {
 
-            width: 90px;
+            width: 105px;
 
-            height: 90px;
+            height: 105px;
 
             margin: 0 auto 30px;
 
@@ -91,12 +168,39 @@
 
             justify-content: center;
 
-            background: white;
+            font-size: 52px;
+
+            background:
+
+                rgba(255, 255, 255, 0.70);
+
+            border:
+
+                1px solid rgba(255,255,255,0.85);
 
             box-shadow:
-                0 10px 35px rgba(37, 99, 235, 0.12);
 
-            font-size: 48px;
+                0 20px 50px
+                rgba(90, 110, 150, 0.14);
+
+            backdrop-filter: blur(12px);
+
+            animation:
+
+                gentleFloat 5s ease-in-out infinite;
+
+        }
+
+
+        @keyframes gentleFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
 
         }
 
@@ -105,26 +209,30 @@
 
         h1 {
 
-            font-size: 52px;
+            font-size: 56px;
 
-            line-height: 1.1;
+            line-height: 1.08;
 
             font-weight: 700;
 
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
+
+            color: #26364a;
 
             margin-bottom: 18px;
 
         }
 
 
-        /* SUBTITLE */
+        /* SUPPORTIVE LINE */
 
         .subtitle {
 
-            font-size: 23px;
+            font-size: 24px;
 
-            color: #4b5563;
+            line-height: 1.5;
+
+            color: #52657c;
 
             margin-bottom: 20px;
 
@@ -135,15 +243,15 @@
 
         .description {
 
-            max-width: 520px;
+            max-width: 550px;
 
-            margin: 0 auto 35px;
+            margin: 0 auto 36px;
 
             font-size: 17px;
 
-            line-height: 1.7;
+            line-height: 1.8;
 
-            color: #6b7280;
+            color: #68788c;
 
         }
 
@@ -158,13 +266,21 @@
 
             justify-content: center;
 
-            gap: 8px;
+            gap: 12px;
 
-            padding: 16px 32px;
+            min-width: 190px;
 
-            border-radius: 30px;
+            padding: 17px 30px;
 
-            background: #2563eb;
+            border-radius: 35px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #527fdb,
+                    #6c71c9
+                );
 
             color: white;
 
@@ -175,69 +291,168 @@
             font-weight: 600;
 
             box-shadow:
-                0 10px 25px rgba(37, 99, 235, 0.22);
+
+                0 14px 35px
+                rgba(82, 112, 190, 0.28);
 
             transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
+
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
 
         }
 
 
         .start-button:hover {
 
-            background: #1d4ed8;
-
-            transform: translateY(-2px);
+            transform: translateY(-3px);
 
             box-shadow:
-                0 14px 30px rgba(37, 99, 235, 0.28);
+
+                0 18px 40px
+                rgba(82, 112, 190, 0.35);
 
         }
 
 
         .arrow {
 
-            font-size: 19px;
+            font-size: 21px;
+
+            transition:
+                transform 0.25s ease;
 
         }
 
 
-        /* TRUST TEXT */
+        .start-button:hover .arrow {
+
+            transform: translateX(4px);
+
+        }
+
+
+        /* TRUST */
 
         .small-text {
 
-            margin-top: 24px;
+            margin-top: 22px;
 
             font-size: 13px;
 
-            color: #9ca3af;
+            color: #8794a5;
 
         }
 
 
-        /* INFORMATION BOX */
+        /* SUPPORT CARD */
 
-        .info {
+        .support-card {
 
-            margin: 35px auto 0;
+            max-width: 540px;
 
-            max-width: 520px;
+            margin: 40px auto 0;
 
-            padding: 16px 20px;
+            padding: 21px 25px;
 
-            border-radius: 15px;
+            border-radius: 20px;
 
-            background: rgba(255, 255, 255, 0.7);
+            background:
 
-            border: 1px solid #e5e7eb;
+                rgba(255, 255, 255, 0.48);
 
-            color: #6b7280;
+            border:
 
-            font-size: 13px;
+                1px solid
+                rgba(255, 255, 255, 0.70);
 
-            line-height: 1.6;
+            box-shadow:
+
+                0 15px 45px
+                rgba(80, 100, 130, 0.08);
+
+            backdrop-filter: blur(14px);
+
+        }
+
+
+        .support-card .quote {
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            color: #596b80;
+
+            font-style: italic;
+
+        }
+
+
+        .support-card .heart {
+
+            display: block;
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        /* DECORATIVE DOTS */
+
+        .dot {
+
+            position: fixed;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            opacity: 0.45;
+
+        }
+
+
+        .dot-one {
+
+            width: 9px;
+            height: 9px;
+
+            background: #8bb2e8;
+
+            top: 20%;
+
+            left: 9%;
+
+        }
+
+
+        .dot-two {
+
+            width: 7px;
+            height: 7px;
+
+            background: #c7a8e8;
+
+            top: 34%;
+
+            right: 11%;
+
+        }
+
+
+        .dot-three {
+
+            width: 11px;
+            height: 11px;
+
+            background: #8fcfc0;
+
+            bottom: 20%;
+
+            left: 13%;
 
         }
 
@@ -248,16 +463,17 @@
 
             .home {
 
-                padding: 20px;
+                padding:
+                    35px 20px;
 
             }
 
 
             .logo {
 
-                width: 75px;
+                width: 82px;
 
-                height: 75px;
+                height: 82px;
 
                 font-size: 40px;
 
@@ -268,7 +484,9 @@
 
             h1 {
 
-                font-size: 38px;
+                font-size: 40px;
+
+                letter-spacing: -1px;
 
             }
 
@@ -282,7 +500,9 @@
 
             .description {
 
-                font-size: 16px;
+                font-size: 15.5px;
+
+                line-height: 1.7;
 
             }
 
@@ -295,6 +515,15 @@
 
             }
 
+
+            .support-card {
+
+                margin-top: 32px;
+
+                padding: 18px;
+
+            }
+
         }
 
     </style>
@@ -304,6 +533,17 @@
 
 <body>
 
+
+    <!-- DECORATIVE ELEMENTS -->
+
+    <div class="dot dot-one"></div>
+
+    <div class="dot dot-two"></div>
+
+    <div class="dot dot-three"></div>
+
+
+    <!-- MAIN PAGE -->
 
     <main class="home">
 
@@ -333,7 +573,8 @@
 
             <p class="subtitle">
 
-                Sometimes you just need someone to listen.
+                You don't have to carry everything
+                by yourself.
 
             </p>
 
@@ -342,14 +583,18 @@
 
             <p class="description">
 
-                Talk freely, without judgement.
-                Put your thoughts into words
-                and take things one moment at a time.
+                Sometimes you just need a quiet place
+                to say what you're feeling.
+
+                <br>
+
+                Take a breath. Write it down.
+                Someone is here to listen.
 
             </p>
 
 
-            <!-- START BUTTON -->
+            <!-- BUTTON -->
 
             <a
                 href="chat.html"
@@ -374,12 +619,22 @@
             </p>
 
 
-            <!-- INFORMATION -->
+            <!-- SUPPORTIVE MESSAGE -->
 
-            <div class="info">
+            <div class="support-card">
 
-                💙 This is an AI conversation companion,
-                not a therapist or emergency service.
+                <span class="heart">
+                    🌿
+                </span>
+
+                <p class="quote">
+
+                    "You don't need to have
+                    everything figured out.
+                    Start with whatever is
+                    on your mind."
+
+                </p>
 
             </div>
 
